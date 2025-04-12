@@ -45,3 +45,40 @@ df["Cluster"] = kmeans.fit_predict(X)
 print("Resultados del agrupamiento por estación:")
 print(df[["Estacion", "Cluster"]])
 print()
+# ========================================
+# 3. Visualización de los grupos
+# ========================================
+
+# Definimos colores para representar cada grupo en el gráfico
+colors = ['red', 'green', 'blue']
+
+# Creamos una figura para el gráfico con tamaño personalizado
+plt.figure(figsize=(10, 6))
+
+# Recorremos cada grupo y graficamos sus estaciones
+for i in range(3):
+    # Filtramos las estaciones del grupo i
+    cluster = df[df["Cluster"] == i]
+    
+    # Dibujamos los puntos en el gráfico
+    plt.scatter(
+        cluster["Longitud"], cluster["Latitud"],
+        s=cluster["Pasajeros_dia"] / 100,    # Tamaño proporcional a la cantidad de pasajeros
+        c=colors[i],                         # Color según el grupo
+        label=f"Grupo {i}",                  # Etiqueta para la leyenda
+        alpha=0.6,                           # Transparencia
+        edgecolors='black'                   # Borde negro para mejor visibilidad
+    )
+
+# Añadimos los nombres de las estaciones encima de cada punto
+for i, row in df.iterrows():
+    plt.text(row["Longitud"], row["Latitud"], row["Estacion"], fontsize=8)
+
+# Configuración del gráfico
+plt.xlabel("Longitud")                               # Eje X
+plt.ylabel("Latitud")                                # Eje Y
+plt.title("Agrupamiento de Estaciones del Metro de Bogotá (K-means)")  # Título
+plt.legend()                                         # Muestra la leyenda
+plt.grid(True)                                       # Agrega cuadrícula
+plt.tight_layout()                                   # Ajusta para que no se solapen elementos
+plt.show()                                           # Muestra el gráfico
