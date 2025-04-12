@@ -27,3 +27,21 @@ data = {
 
 # Convertimos el diccionario en un DataFrame de pandas
 df = pd.DataFrame(data)
+
+# ========================================
+# 2. Aplicación del modelo de Agrupamiento (K-means)
+# ========================================
+
+# Seleccionamos las columnas numéricas que usará el modelo para agrupar
+X = df[["Latitud", "Longitud", "Pasajeros_dia", "Tiempo_espera_min"]]
+
+# Creamos una instancia del modelo K-means con 3 grupos (clusters)
+kmeans = KMeans(n_clusters=3, random_state=42)
+
+# Entrenamos el modelo y obtenemos los grupos a los que pertenece cada estación
+df["Cluster"] = kmeans.fit_predict(X)
+
+# Mostramos los resultados por estación
+print("Resultados del agrupamiento por estación:")
+print(df[["Estacion", "Cluster"]])
+print()
